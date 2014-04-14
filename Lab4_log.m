@@ -90,7 +90,7 @@ while ~done && ~FS.Stop()
     % Communicate with the labjack
     I_value_raw_mean=0; V_value_raw_mean=0;
     try
-        n = 4; % number of readings to average
+        n = 16; % number of readings to average
         I_values_raw = zeros(1,n);
         V_values_raw = zeros(1,n);
         %Request a single-ended reading from the current sensor.
@@ -132,7 +132,7 @@ while ~done && ~FS.Stop()
 end
 
 % turn off the throttle
-fprintf('Turing motor off...');
+fprintf('Turing motor off\n');
 try
     %Set the PWM duty cycle to 0%.
     ljudObj.AddRequest(ljhandle, LabJack.LabJackUD.IO.PUT_TIMER_VALUE, 0, u3_pwm_duty(0.0), 0, 0);
@@ -141,7 +141,6 @@ try
 catch
     showErrorMessage(e)
 end
-fprintf('done\n');
 
 % clean up the stop box
 FS.Clear(); % Clear up the box
@@ -149,7 +148,7 @@ clear FS; % this structure has no use anymore
 
 % close the data log file
 fclose(fileID);
-fprintf('Test data save to log file %s\n', filename);
+fprintf('Test data saved to log file %s\n', filename);
 
 % close the connection to the LabJack
 ljudObj.Close()
