@@ -2,28 +2,30 @@
 % 16.Unified
 % Written by Matt Vernacchia, mvernacc@mit.edu , April 2014
 
-%%%% User-Changeable Section %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% filename of .csv file containing the data log
-filename = 'Unified_Lab4_battery_data_12-Apr-2014_13-06-10.csv';
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 %% Battery data
 % Battery maxiumum safe voltage [V]
 bat_v_max = 4.2*2;
 % Battery minimum safe voltage [V]
 bat_v_min = 3.5*2;
 
-%% Load data
+%% Load data from test log
+% filename of .csv file containing the data log
+filename = uigetfile({'.csv'});
+
 M = csvread(filename);
 
 % Time [s]
 t = M(:,1);
 % Battery current [A]
-I = M(:,2);
+I_raw = M(:,2);
 % Battery voltage [V]
-V = M(:,3);
+V_raw = M(:,3);
 % throttle setting [0 to 1]
 throttle = M(:,4);
+
+%% Filter the voltage and current
+I = lowPass(I_raw,0.2);
+V = lowPass(V_raw,0.2);
 
 %% Integrate the battery charge
 % battery charge level relative to test start [Coulombs]
@@ -39,16 +41,18 @@ c_mahr = c*0.2778;
 figure('Name', 'Lab4 Time Traces')
 % current
 subplot(4,1,1)
-plot(t,I)
+plot(t,I,'b', t,I_raw,':r')
 grid on
 xlabel('Time since test start [s]')
 ylabel('Battery current [A]')
+legend('Filtered', 'Raw')
 % voltage
 subplot(4,1,2)
-plot(t,V)
+plot(t,V,'b', t,V_raw,':r')
 grid on
 xlabel('Time since test start [s]')
 ylabel('Battery voltage [V]')
+legend('Filtered', 'Raw')
 % battery charge
 subplot(4,1,3)
 plot(t,c_mahr)

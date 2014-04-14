@@ -20,6 +20,9 @@ try
     %Open the first found LabJack U3.
     [ljerror, ljhandle] = ljudObj.OpenLabJack(LabJack.LabJackUD.DEVICE.U3, LabJack.LabJackUD.CONNECTION.USB, '0', true, 0);
     
+    %Used for casting a value to a CHANNEL enum
+    chanType = LabJack.LabJackUD.CHANNEL.LOCALID.GetType;
+    
     %Start by using the pin_configuration_reset IOType so that all
     %pin assignments are in the factory default condition.
     chanObj = System.Enum.ToObject(chanType, 0); %channel = 0
@@ -85,10 +88,11 @@ while ~done && ~FS.Stop()
     throttle = throttle_time(t_cycle_start);
     duty = esc_throttle_to_pwm_duty(throttle);
     % Communicate with the labjack
+    I_value_raw_mean=0; V_value_raw_mean=0;
     try
         n = 4; % number of readings to average
         I_values_raw = zeros(1,n);
-        I_values_raw = zeros(1,n);
+        V_values_raw = zeros(1,n);
         %Request a single-ended reading from the current sensor.
         ljudObj.AddRequest(ljhandle, LabJack.LabJackUD.IO.GET_AIN, PIN_BAT_I, 0, 0, 0);
         %Request a single-ended reading from the battery voltage pin.
@@ -128,6 +132,7 @@ while ~done && ~FS.Stop()
 end
 
 % turn off the throttle
+fprintf('Turing motor off...');
 try
     %Set the PWM duty cycle to 0%.
     ljudObj.AddRequest(ljhandle, LabJack.LabJackUD.IO.PUT_TIMER_VALUE, 0, u3_pwm_duty(0.0), 0, 0);
@@ -136,7 +141,7 @@ try
 catch
     showErrorMessage(e)
 end
-
+fprintf('done\n');
 
 % clean up the stop box
 FS.Clear(); % Clear up the box
@@ -144,6 +149,7 @@ clear FS; % this structure has no use anymore
 
 % close the data log file
 fclose(fileID);
+fprintf('Test data save to log file %s\n', filename);
 
 % close the connection to the LabJack
 ljudObj.Close()
