@@ -2,6 +2,15 @@
 % 16.Unified
 % Written by Matt Vernacchia, mvernacc@mit.edu , April 2014
 
+% look for needed files in the directory 1 level up
+addpath('..')
+
+% Battery data
+% Battery maxiumum safe voltage [V]
+bat_v_max = 4.2*2;
+% Battery minimum safe voltage [V]
+bat_v_min = 3.5*2;
+
 % Sensing period [sec]
 T = 0.1;
 
@@ -122,6 +131,12 @@ while ~done && ~FS.Stop()
     
     % Write to the data log file
     fprintf(fileID, '%.3f,%.3f,%.3f,%.3f\n', t_cycle_start, I_value, V_value, throttle);
+    
+    % If the battery voltage is below the safe level, stop the test
+    if(V_value < v_bat_min)
+        fprintf('Battery Voltage is too low, stopping the test\n');
+        break
+    end
     
     % Wait until it's time for the next cycle
     t_used = etime(clock,t0) - t_cycle_start;

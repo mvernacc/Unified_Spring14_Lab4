@@ -2,6 +2,9 @@
 % 16.Unified
 % Written by Matt Vernacchia, mvernacc@mit.edu , April 2014
 
+% look for needed files in the directory 1 level up
+addpath('..')
+
 % Sensing period [sec]
 T = 0.1;
 

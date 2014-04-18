@@ -2,6 +2,8 @@
 % 16.Unified
 % Written by Matt Vernacchia, mvernacc@mit.edu , April 2014
 
+% look for needed files in the directory 1 level up
+addpath('..')
 %% Battery data
 % Battery maxiumum safe voltage [V]
 bat_v_max = 4.2*2;
