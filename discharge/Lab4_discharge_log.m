@@ -7,9 +7,9 @@ addpath('..')
 
 % Battery data
 % Battery maxiumum safe voltage [V]
-bat_v_max = 4.2*2;
+v_bat_max = 4.2*2;
 % Battery minimum safe voltage [V]
-bat_v_min = 3.5*2;
+v_bat_min = 3.5*2;
 
 % Sensing period [sec]
 T = 0.1;
@@ -64,7 +64,7 @@ fprintf('done\n');
 date_string = datestr(now);
 date_string = strrep(date_string, ':', '-');
 date_string = strrep(date_string, ' ', '_');
-filename = ['Unified_Lab4_battery_data_', date_string, '.csv'];
+filename = ['Unified_Lab4_discharge_data_', date_string, '.csv'];
 fprintf('Opening log file %s ...', filename);
 fileID = fopen(filename, 'W');
 fprintf('done\n');

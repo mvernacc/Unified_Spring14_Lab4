@@ -4,7 +4,7 @@ function throttle = throttle_time( time )
 %   throttle The throttle setting for that time [0 to 1]
 
 %%%% User-Changeable Section %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-throttle = 0.30 + 0.20*sin(time/2);
+throttle = 0.50 + 0.40*sin(time/2);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 assert(throttle >= 0 && throttle <= 1,...
