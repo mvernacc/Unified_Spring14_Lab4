@@ -28,11 +28,14 @@ I_sol_unfilt = M(:,4);
 % Solar panel voltage [V]
 V_sol_unfilt = M(:,5);
 
+%% Offset for sensor error
+I_bat_unfilt = I_bat_unfilt - 0.42;
+I_sol_unfilt = I_sol_unfilt - 0.45;
 
 %% Filter the voltage and current
-I_bat = lowPass(I_bat_unfilt,0.2);
+I_bat = lowPass(I_bat_unfilt,0.05);
 V_bat = lowPass(V_bat_unfilt,0.2);
-I_sol = lowPass(I_sol_unfilt,0.2);
+I_sol = lowPass(I_sol_unfilt,0.05);
 V_sol = lowPass(V_sol_unfilt,0.2);
 
 %% Integrate the battery charge
